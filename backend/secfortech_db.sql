@@ -32,6 +32,12 @@ CREATE TABLE IF NOT EXISTS public.ciudades (
 	CONSTRAINT ciudades_regiones_fk FOREIGN KEY (region) REFERENCES public.regiones (id_region)
 );
 
+CREATE TABLE IF NOT EXISTS public.roles (
+	id_rol integer not null,
+	nombre varchar(20) not null,
+	CONSTRAINT roles_pk PRIMARY KEY (id_rol)
+);
+
 CREATE TABLE IF NOT EXISTS public.usuarios (
 	rut varchar(10) not null,
 	nombre_usuario varchar(15) not null,
@@ -39,9 +45,11 @@ CREATE TABLE IF NOT EXISTS public.usuarios (
 	contrasenya varchar(20) not null,
 	region integer not null,
 	ciudad integer not null,
+	rol integer not null,
 	CONSTRAINT usuarios_pk PRIMARY KEY (rut),
 	CONSTRAINT usuarios_regiones_fk FOREIGN KEY (region) REFERENCES public.regiones (id_region),
-	CONSTRAINT usuarios_ciudades_fk FOREIGN KEY (ciudad) REFERENCES public.ciudades (id_ciudad)
+	CONSTRAINT usuarios_ciudades_fk FOREIGN KEY (ciudad) REFERENCES public.ciudades (id_ciudad),
+	CONSTRAINT usuarios_roles_fk FOREIGN KEY (rol) REFERENCES public.roles (id_rol)
 );
 
 CREATE TABLE IF NOT EXISTS public.productos (
@@ -75,6 +83,29 @@ CREATE TABLE IF NOT EXISTS public.orden_productos (
 	CONSTRAINT orden_productos_fk1 FOREIGN KEY (nro_orden) REFERENCES public.orden (id_orden),
 	CONSTRAINT orden_productos_fk2 FOREIGN KEY (cod_producto) REFERENCES public.productos (id_producto)
 );
+
+INSERT INTO marcas VALUES
+(1, 'Logitech'),
+(2, 'Razer'),
+(3, 'HyperX'),
+(4, 'Gear'),
+(5, 'Viewsonic'),
+(6, 'Samsung'),
+(7, 'NZXT'),
+(8, 'Seagate'),
+(9, 'Gigabyte'),
+(10, 'EVGA'),
+(11, 'Be quiet!'),
+(12, 'Spektra'),
+(13, 'MSI');
+
+INSERT INTO categorias VALUES
+(1, 'Accesorios'),
+(2, 'Componentes');
+
+INSERT INTO roles VALUES
+(1, 'Administrador'),
+(2, 'Usuario');
 
 -- id, nombre
 INSERT INTO regiones VALUES 
@@ -130,25 +161,18 @@ INSERT INTO ciudades VALUES
 (32, 'Combarbalá', 4),
 (33, 'Monte Patria', 4),
 (34, 'Punitaqui', 4),
-(35, 'Río Hurtado', 4);
+(35, 'Río Hurtado', 4),
+(36, 'Valparaiso', 5),
+(37, 'Casablanca', 5),
+(38, 'Concón', 5),
+(39, 'Juan Fernández', 5),
+(40, 'Puchuncaví', 5),
+(41, 'Quintero', 5),
+(42, 'Viña del mar', 5);
 
-INSERT INTO marcas VALUES
-(1, 'Logitech'),
-(2, 'Razer'),
-(3, 'HyperX'),
-(4, 'Gear'),
-(5, 'Viewsonic'),
-(6, 'Samsung'),
-(7, 'NZXT'),
-(8, 'Seagate'),
-(9, 'Gigabyte'),
-(10, 'EVGA'),
-(11, 'Be quiet!'),
-(12, 'Spektra'),
-(13, 'MSI');
-
-INSERT INTO categorias VALUES
-(1, 'Accesorios'),
-(2, 'Componentes');
+-- rut, nombre, mail, contraseña, region, ciudad, rol
+INSERT INTO usuarios VALUES
+('22888111-1', 'admin', 'admin@admin.cl', '22888111Ts', 5, 38, 1),
+('14982843-3', 'user', 'usuario@test.cl', '11222333Ts', 5, 42, 2);
 
 COMMIT;

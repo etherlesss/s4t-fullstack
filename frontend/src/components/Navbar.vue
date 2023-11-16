@@ -12,6 +12,9 @@
                     <li class="nav-item" v-for="link in links">
                         <router-link class="nav-link" :to="link.url">{{ link.name }}</router-link>
                     </li>
+                    <li class="nav-item" v-if="isUserAdmin === 1">
+                        <router-link class="nav-link" to="/admin">Control panel</router-link>
+                    </li>
                 </ul>
                 <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
@@ -36,6 +39,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
     data() {
         return {
+            isUserAdmin: 0,
+
             links: [
                 { name: 'Productos', url: '/search' },
                 { name: 'Soporte al cliente', url: '/support' },

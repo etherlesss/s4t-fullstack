@@ -37,7 +37,7 @@ app.get('/', (req: Request, res: Response) => {
     res.json({message: 'API de express con PSQL'});
 });
 
-// GET
+// GET - READ
 app.get('/filters', async (req: Request, res: Response) => {
     try {
         const marcas = await db.any("SELECT * FROM marcas");
@@ -58,43 +58,14 @@ app.get('/categories', async (req: Request, res: Response) => {
     }
 });
 
-// POST
+// POST - UPLOAD
 
 
-// PUT
+// PUT - UPDATE
 
 
 // DELETE
 
-
-// login
-
-
-// register
-/*
-app.post('/signup', jsonParser, async (req:any, res:any) => {
-    let usuario = req.body.User;
-    let rut = req.body.Rut;
-    let email = req.body.email;
-    let pwd = req.body.Password;
-    let region = req.body.Region;
-    let ciudad = req.body.city;
-
-    try {
-        // Validar los datos de entrada
-        if (!usuario || !rut || !email || !pwd || !region || !ciudad) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
-        }
-
-        await db.none('INSERT INTO usuarios(rut, nombre_usuario, mail, contrasenya, region, ciudad) VALUES($1, $2, $3, $4, $5, $6)',
-                [rut, usuario, email, pwd, region, ciudad]);
-        res.status(200).json({ success: true, message: 'Usuario registrado exitosamente.' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-});
-*/
 
 // Iniciar server
 app.listen(port, () => {
