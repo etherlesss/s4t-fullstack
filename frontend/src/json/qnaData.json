@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "pregunta": "¿Qué son productos reacondicionados?",
+        "respuesta": "Los productos reacondicionados son artículos que previamente han sido utilizados y devueltos a su fabricante o vendedor original. Luego, son inspeccionados, reparados si es necesario y sometidos a pruebas de calidad antes de volver a ponerlos a la venta. Estos productos pueden haber tenido defectos menores o simplemente haber sido devueltos por el comprador original."
+    },
+    {
+        "id": 2,
+        "pregunta": "¿Son seguros sus productos reacondicionados?",
+        "respuesta": "Sí, nuestros productos reacondicionados son seguros, ya que son sometidos a pruebas exhaustivas para garantizar su calidad y funcionamiento antes de ser puestos a la venta. Además, contamos con garantías que respaldan su funcionamiento."
+    },
+    {
+        "id": 3,
+        "pregunta": "¿Cómo se diferencian los productos reacondicionados de los productos nuevos?",
+        "respuesta": "Los productos reacondicionados suelen ser más asequibles que los nuevos, pero pueden mostrar signos leves de desgaste. Sin embargo, a menudo son prácticamente indistinguibles en términos de rendimiento y calidad."
+    },
+    {
+        "id": 4,
+        "pregunta": "¿Tienen garantía sus productos reacondicionados?",
+        "respuesta": "Sí, estos vienen con garantías que cubren defectos y problemas de funcionamiento."
+    },
+    {
+        "id": 5,
+        "pregunta": "¿Cuál es el beneficio de comprar productos reacondicionados en lugar de nuevos?",
+        "respuesta": "El beneficio principal es el ahorro económico. Los productos reacondicionados son significativamente más económicos que los nuevos, lo que te permite obtener un producto de alta calidad a un precio más asequible."
+    },
+    {
+        "id": 6,
+        "pregunta": "¿Cuál es la política de privacidad y seguridad de los datos en su sitio de eCommerce?",
+        "respuesta": "Nuestra política de privacidad y seguridad de datos está diseñada para proteger la información de nuestros clientes. Seguimos prácticas de seguridad estándar de la industria para proteger tus datos personales y de pago. Puedes obtener más detalles en nuestra sección de política de privacidad."
+    }
+]

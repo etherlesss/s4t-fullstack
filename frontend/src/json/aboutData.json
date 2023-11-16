@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "pregunta": "¿Quienes somos?",
+        "respuesta": "Somos una página de tipo eCommerce enfocada en venta de productos tecnológicos reacondicionados."
+    },
+    {
+        "id": 2,
+        "pregunta":"¿Cuál es nuestro objetivo?",
+        "respuesta": "Nuestro objetivo es fomentar la reutilización y la sustentabilidad mediante la creación de una plataforma web de comercio online para venta de componentes electrónicos que no se logran ender en tiendas de primera mano"
+    },
+    {
+        "id": 3,
+        "pregunta": "¿A quién buscamos beneficiar?",
+        "respuesta": "A usuarios, empresas e interesados comprar componentes tecnológicos y periféricos reacondicionados. Lo que beneficiará tanto al medioambiente como a las personas con poco poder adquisitivo, empresas que busquen recortes en presupuestos, informáticos y trabajadores independientes."
+    }
+]

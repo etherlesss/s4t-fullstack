@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+@bg-col: #121212; // Background color
+@fg-col: #ffffff; // Foreground color
+
+@mainbtn-col: #121212; // Main button color
+@mainbtn-hov: #303030; // Main button hover
+@mainbtn-act: #707070; // Main button active
+
+@sndbtn-col: #ffffff; // Secondary button color
+@sndbtn-hov: #303030; // Secondary button hover
+@sndbtn-act: #707070; // Secondary button active
+@sndbtn-bc: #121212; // Secondary button border color
+
+@navbtn-col: #ffffff; // Navbar button color
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* MOTD */
+.motd {
+    text-align: center;
+}
+
+/* BUTTONS */
+.main-btn {
+    background-color: @bg-col;
+    border-color: @bg-col;
+}
+
+.main-btn:hover {
+    background-color: @mainbtn-hov;
+    border-color: @mainbtn-hov;
+}
+
+.main-btn:active {
+    background-color: @mainbtn-act !important;
+    border-color: @mainbtn-act !important;
+}
+
+.secondary-btn {
+    background-color: @sndbtn-col;
+    border-color: @sndbtn-bc;
+    color: @sndbtn-bc;
+}
+
+.secondary-btn:hover {
+    background-color: @sndbtn-hov;
+    border-color: @sndbtn-hov;
+}
+
+.secondary-btn:active {
+    background-color: @sndbtn-act !important;
+    border-color: @sndbtn-act !important;
+}
+
+.nav-btn {
+    color: @navbtn-col;
+    font-size: 32px;
+    transform: translateY(8px);
+}
+
+/* STATIC STYLES */
+#section-title {
+    text-align: center;
+    border-bottom: 1px solid #121212;
+}
+
+#nav-logo {
+    height: 100px;
+}
+
+#footer-logo {
+    height: 150px;
+}
