@@ -20,14 +20,14 @@ const corsConfig = {
 
 app.use(cors(corsConfig));
 
-// postgres
+// Postgres
 const pgp = require("pg-promise")();
 const connection = {
     host: 'localhost',
     port: 5432,
     database: 'secfortech', // Nombre de la DB (cambiar respecto a su contraseña respectiva para probar)
     user: 'postgres',
-    password: 'postgres' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
+    password: 'admin' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
 }
 
 const db = pgp(connection)
@@ -37,9 +37,60 @@ app.get('/', (req: Request, res: Response) => {
     res.json({message: 'API de express con PSQL'});
 });
 
-//LOGIN ¿?
+/*
+    GET - READ
+*/
 
-app.post('/login',jsonParser,async(req:Request,res:Response)=>{
+// VER LISTA DE PRODUCTOS
+app.get('/productos', async(req:Request,res:Response)=>{
+    try{
+        let result = await db.any("SELECT * FROM productos");
+        res.json(result);
+    }
+    catch (error){
+        res.status(500).json({error: 'Error al obtener los productos.'});
+    }
+});
+
+// VER USUARIOS
+app.get('/admin/usuarios', async(req:Request,res:Response)=>{
+    try{
+        let result = await db.any("SELECT * FROM usuarios");
+        res.json(result);
+    }
+    catch (error){
+        res.status(500).json({error: 'Error al obtener los usuarios.'});
+    }
+});
+
+// VER FILTROS
+app.get('/filters', async (req: Request, res: Response) => {
+    try {
+        const marcas = await db.any("SELECT * FROM marcas");
+        res.json(marcas);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Error al obtener las marcas.'});
+    }
+});
+
+// VER LAS CATEGORIAS
+app.get('/categories', async (req: Request, res: Response) => {
+    try {
+        const categorias = await db.any("SELECT * FROM categorias");
+        res.json(categorias);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Error al obtener las categorias.'});
+    }
+});
+
+/*
+    POST - UPLOAD
+*/
+
+// LOGIN
+app.post('/login', jsonParser, async(req:Request,res:Response) => {
 
     let nombre_usuario = req.body.nombre_usuario;
     let contrasenya = req.body.contrasenya;
@@ -48,9 +99,9 @@ app.post('/login',jsonParser,async(req:Request,res:Response)=>{
         let result = await db.any('SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasenya = $2',[nombre_usuario,contrasenya]);
         
         if(result[0].rol === (1)){
-            res.redirect('/admin');
+            res.json({userType: 1}); // ADMIN
         } else if (result[0].rol === (2)){
-            res.redirect('/user');
+            res.json({userType: 2}); // USER
         }
         else{
             res.status(401).json({error:'Tipo de usuario inválido'});
@@ -61,9 +112,10 @@ app.post('/login',jsonParser,async(req:Request,res:Response)=>{
     }
 });
 
-//REGISTRO
+/* TODO: REGISTRO DESPUES DE QUE LOS FORMS ENTREGUEN JSON. */
 
-app.post('/register',jsonParser,async(req:Request,res:Response)=>{
+// REGISTRO
+app.post('/register', jsonParser, async(req:Request,res:Response) => {
 
     let rut = req.body.rut;
     let nombre_usuario = req.body.nombre_usuario;
@@ -81,65 +133,8 @@ app.post('/register',jsonParser,async(req:Request,res:Response)=>{
     }
 });
 
-// GET - READ
-
-//revisar los productos desde una vista de usuario
-app.get('/user/productos', async(req:Request,res:Response)=>{
-    try{
-        let result = await db.any("SELECT * FROM productos");
-        res.json(result);
-    }
-    catch (error){
-        res.status(500).json({error: 'Error al obtener los productos.'});
-    }
-});
-
-//ver una lista de los usuarios registrados
-app.get('/admin/usuarios', async(req:Request,res:Response)=>{
-    try{
-        let result = await db.any("SELECT * FROM usuarios");
-        res.json(result);
-    }
-    catch (error){
-        res.status(500).json({error: 'Error al obtener los usuarios.'});
-    }
-});
-
-app.get('/filters', async (req: Request, res: Response) => {
-    try {
-        const marcas = await db.any("SELECT * FROM marcas");
-        res.json(marcas);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'Error al obtener las marcas.'});
-    }
-});
-
-//ver la categorías¿?
-app.get('/categories', async (req: Request, res: Response) => {
-    try {
-        const categorias = await db.any("SELECT * FROM categorias");
-        res.json(categorias);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'Error al obtener las categorias.'});
-    }
-});
-
-//no se si hay que hacer algo así
-
-app.get('/admin',(req:any,res:any)=>{
-    res.json({message: 'Bienvenido Administrador'});
-});
-
-app.get('/user',(req:any,res:any)=>{
-    res.json({message: 'Bienvenido Usuario'});
-});
-
-// POST - UPLOAD
-
-//agregar producto
-app.post('/admin/agregarProducto',jsonParser,async(req:Request,res:Response)=>{
+// AGREGAR PRODUCTOS
+app.post('/admin/agregarProducto', jsonParser, async(req:Request,res:Response) => {
     const id_producto = req.body.id_producto;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;

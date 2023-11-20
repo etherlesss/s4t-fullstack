@@ -12,7 +12,7 @@
                     <li class="nav-item" v-for="link in links">
                         <router-link class="nav-link" :to="link.url">{{ link.name }}</router-link>
                     </li>
-                    <li class="nav-item" v-if="isUserAdmin === 1">
+                    <li class="nav-item" v-if="isUserAdmin === true">
                         <router-link class="nav-link" to="/admin">Control panel</router-link>
                     </li>
                 </ul>
@@ -20,11 +20,21 @@
                     <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                 </form>
-                <ul class="d-flex list-unstyled">
+                <ul class="d-flex list-unstyled align-items-center">
                     <li class="nav-btn">
                         <router-link class="nav-link" to="/cart"><i class="bi bi-cart3 mx-3"></i></router-link>
                     </li>
-                    <li class="nav-btn">
+                    <li class="logged-tab nav-item dropdown mt-3" v-if="isUserLogged === true">
+                        <a class="nav-link dropdown-toggle nav-item" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Bienvenido, {{ username }}.
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Ver pefil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Configuraciones</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-btn" v-if="isUserLogged === false">
                         <router-link class="nav-link" to="/login"><i class="bi bi-person-circle"></i></router-link>
                     </li>
                 </ul>
@@ -35,11 +45,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { postLogin } from '../api/utils';
 
 export default defineComponent({
     data() {
         return {
-            isUserAdmin: 0,
+            username: "",
+            isUserAdmin: false,
+            isUserLogged: false,
 
             links: [
                 { name: 'Productos', url: '/search' },
@@ -47,6 +60,12 @@ export default defineComponent({
                 { name: 'Sobre nosotros', url: '/about' }
             ]
         };
+    },
+    async mounted() {
+        const user = await postLogin()
+        this.isUserLogged = user.isLogged;
+        this.isUserAdmin = user.isAdmin;
+        this.username = user.username as string;
     },
     name: 'Navbar'
 });
