@@ -84,9 +84,8 @@ export default defineComponent({
                     as: 'input',
                     type:'password',
                     class: 'form-control',
-                    rules: Yup.string()
-                        .oneOf([Yup.ref('Password')], 'Las contraseñas no coinciden')
-                        .required('Campo Obligatorio')
+                    //aqui esta el bug
+                    //rules: Yup.string().required('Campo Obligatorio').oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
                 },
                 
             ],

@@ -2,10 +2,10 @@
     <div class="form-content">
         <div class="signup container-md w-75">
             <h2 class="w-25">Registro</h2>
-            <Form class="row g-3">
+            <Form class="row g-3" @submit="submitForm">
                 <div class="mb-3 col-12" v-for="{ as, name, label, children, ...attrs } in schema.fields" :key="name">
                     <label :for="name" class="form-label">{{ label }}</label>
-                    <Field :as="as" :id="name" :class="attrs.class" :name="name" v-bind="attrs">
+                    <Field :as="as" :id="name" :class="attrs.class" :name="name" v-bind="attrs" v-model="formData[name]">
                         <template v-if="children && children.length">
                             <component v-for="({ tag, text, ...childAttrs }, idx) in children" :key="idx" :is="tag"
                                 v-bind="childAttrs">
@@ -20,14 +20,14 @@
                 <div>
                     <div class="col-12">
                         <label for="Region">Selecciona una Región</label>
-                        <select v-model="selectedRegion" class="form-control" id="Region">
+                        <select v-model="formData.selectedRegion" class="form-control" id="Region">
                             <option v-for="region in regions" :value="region.id" :key="region.id">{{ region.name }}</option>
                         </select>
                     </div>
-                    <div class="col-12" v-if="selectedRegion">
+                    <div class="col-12" v-if="formData.selectedRegion">
                         <label for="City">Selecciona una Ciudad</label>
-                        <select v-model="selectedCity"  class="form-control" id="city">
-                            <option v-for="city in cities[selectedRegion]" :value="city" :key="city">{{ city }}</option>
+                        <select v-model="formData.selectedCity"  class="form-control" id="city">
+                            <option v-for="city in cities[formData.selectedRegion]" :value="city" :key="city">{{ city }}</option>
                         </select>
                     </div>
                 </div>
@@ -68,10 +68,24 @@ export default {
     },
     data() {
         return {
+            formData:{
+                User:'',
+                Rut:'',
+                email:'',
+                Password:'',
+                ConfirmPassword:'',
+                selectedRegion:[],
+                selectedCity:[],
+            },
             selectedRegion: null,
             selectedCity:null,
             regions: citiesInfo.regions,
             cities: citiesInfo.cities,
+        }
+    },
+    methods: {
+        submitForm() {
+            console.log('Form values', (this as any).formData);
         }
     },
 };

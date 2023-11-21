@@ -2,10 +2,10 @@
     <div class="form-content">
         <div class="main-content container-md w-75">
             <h2 class="w-25">Iniciar sesión</h2>
-            <Form class="row g-3">
+            <Form class="row g-3" @submit="SubmitForm">
                 <div class="mb-3 col-12" v-for="{ as, name, label, children, ...attrs } in schema.fields" :key="name">
                     <label :for="name" class="form-label">{{ label }}</label>
-                    <Field :as="as" :id="name" :class="attrs.class" :name="name" v-bind="attrs">
+                    <Field :as="as" :id="name" :class="attrs.class" :name="name" v-bind="attrs" v-model="formData[name]">
                         <template v-if="children && children.length">
                             <component v-for="({ tag, text, ...childAttrs }, idx) in children" :key="idx" :is="tag"
                                 v-bind="childAttrs">
@@ -36,7 +36,12 @@
 </template>
   
 <script lang="ts">
-import { Form, Field, ErrorMessage } from 'vee-validate';
+import { Form, Field, ErrorMessage} from 'vee-validate';
+
+interface FormData {
+    email: string;
+    password: string;
+}
 
 export default {
 
@@ -51,6 +56,19 @@ export default {
             type: Object,
             required: true,
         },
+    },
+    data(): { formData: FormData } {
+        return {
+            formData:{
+                email:'',
+                password:'',
+            },
+        };
+    },
+    methods: {
+        SubmitForm() {
+            console.log('Form values', (this as any).formData);
+        }
     },
 };
 </script>
@@ -77,4 +95,3 @@ h2 {
     text-align: center;
 }
 </style>
-  
