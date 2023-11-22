@@ -24,7 +24,7 @@
 
         <h2 id="section-title">Quizá te pueda interesar</h2>
         <section class="mb-5">
-            <Card />
+            <RecommendedCards />
         </section>
 
         <h2 id="section-title">Especificaciones</h2>
@@ -40,14 +40,14 @@
 import { defineComponent } from 'vue';
 import Navbar from '@/components/Navbar.vue'; // @ is an alias to /src
 import Footer from '@/components/Footer.vue';
-import Card from '@/components/Card.vue';
+import RecommendedCards from '@/components/cards/Recommended.vue';
 import Spec from '@/components/Spec.vue';
 
 export default defineComponent({
     name: 'DetailView',
     components: {
         Navbar,
-        Card,
+        RecommendedCards,
         Spec,
         Footer
     },

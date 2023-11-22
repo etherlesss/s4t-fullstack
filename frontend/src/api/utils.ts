@@ -31,6 +31,39 @@ async function getCategories() {
     return res.map((item:any) => { return item.nombre }).sort();
 }
 
+async function getProducts() {
+    const res = await GETRequest("/productos");
+
+    for (let i = 0; i < res.length; i++) {
+        if (res[i].imagen === null) {
+            res[i].imagen = "https://www.hongshen.cl/wp-content/uploads/2016/07/no-disponible.png";
+        }
+    }
+
+    return res;
+}
+
+async function getRecommended() {
+    const res = await GETRequest("/productos");
+    const rec = [] as any;
+
+    for (let i = 0; i < res.length; i++) {
+        if (res[i].imagen === null) {
+            res[i].imagen = "https://www.hongshen.cl/wp-content/uploads/2016/07/no-disponible.png";
+        }
+    }
+
+    while (rec.length < 3) {
+        const rand = Math.floor(Math.random() * res.length);
+        const randItem = res[rand];
+        if (!rec.includes(randItem)) {
+          rec.push(randItem);
+        }
+    }
+
+    return rec;
+}
+
 async function POSTRequest(endpoint:string, body:any) {
     try {
         const res = await axios.post(url + endpoint ,body, config);
@@ -56,4 +89,4 @@ async function postLogin() {
     return { username, isAdmin: usertype, isLogged: true };
 }
 
-export { getFilters, getCategories, postLogin };
+export { getFilters, getCategories, postLogin, getProducts, getRecommended };

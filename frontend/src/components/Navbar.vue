@@ -62,10 +62,14 @@ export default defineComponent({
         };
     },
     async mounted() {
-        const user = await postLogin()
-        this.isUserLogged = user.isLogged;
-        this.isUserAdmin = user.isAdmin;
-        this.username = user.username as string;
+        try {
+            const user = await postLogin();
+            this.isUserLogged = user.isLogged;
+            this.isUserAdmin = user.isAdmin;
+            this.username = user.username as string;
+        } catch (error) {
+            console.log(error);
+        }
     },
     name: 'Navbar'
 });

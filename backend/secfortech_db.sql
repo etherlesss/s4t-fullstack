@@ -55,9 +55,10 @@ CREATE TABLE IF NOT EXISTS public.usuarios (
 CREATE TABLE IF NOT EXISTS public.productos (
 	id_producto integer not null,
 	nombre varchar(200) not null,
-	descripcion varchar(500) not null,
+	descripcion varchar(500),
 	precio integer not null,
 	stock integer not null,
+	imagen varchar(500),
 	marca integer not null,
 	categoria integer not null,
 	CONSTRAINT productos_pk PRIMARY KEY (id_producto),
@@ -169,6 +170,10 @@ INSERT INTO ciudades VALUES
 (40, 'Puchuncaví', 5),
 (41, 'Quintero', 5),
 (42, 'Viña del mar', 5);
+
+INSERT INTO productos VALUES
+(0, 'producto de prueba', null, 9990, 2, null, 1, 1),
+(1, 'producto de prueba 222222', null, 9990, 2, null, 5, 2);
 
 -- rut, nombre, mail, contraseña, region, ciudad, rol
 INSERT INTO usuarios VALUES

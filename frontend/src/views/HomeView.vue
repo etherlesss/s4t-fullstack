@@ -3,8 +3,8 @@
     <Navbar />
     <Carousel />
     <section class="container">
-        <h2 id="section-title">Ofertas del día</h2>
-        <Card />
+        <h2 id="section-title">Productos recomendados</h2>
+        <RecommendedCards />
     </section>
     <Footer />
 </template>
@@ -14,14 +14,14 @@ import { defineComponent } from 'vue';
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
 import Carousel from '@/components/Carousel.vue';
-import Card from '@/components/Card.vue';
+import RecommendedCards from '@/components/cards/Recommended.vue';
 
 export default defineComponent({
     name: 'HomeView',
     components: {
         Navbar,
         Carousel,
-        Card,
+        RecommendedCards,
         Footer
     },
     // SEO

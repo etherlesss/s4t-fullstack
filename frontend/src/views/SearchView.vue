@@ -6,7 +6,7 @@
         </aside>
         <main class="container">
             <h1 id="section-title">Resultados de búsqueda</h1>
-            <Card />
+            <ProductCards />
         </main>
     </div>
     <Footer />
@@ -17,14 +17,14 @@ import { defineComponent } from 'vue';
 import Navbar from '@/components/Navbar.vue'; // @ is an alias to /src
 import Footer from '@/components/Footer.vue';
 import Filter from '@/components/Filter.vue';
-import Card from '@/components/Card.vue';
+import ProductCards from '@/components/cards/Products.vue';
 
 export default defineComponent({
     name: 'SearchView',
     components: {
         Navbar,
         Filter,
-        Card,
+        ProductCards,
         Footer
     },
     // SEO

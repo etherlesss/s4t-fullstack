@@ -42,7 +42,7 @@ app.get('/', (req: Request, res: Response) => {
 */
 
 // VER LISTA DE PRODUCTOS
-app.get('/productos', async(req:Request,res:Response)=>{
+app.get('/productos', async(req:Request,res:Response) => {
     try{
         let result = await db.any("SELECT * FROM productos");
         res.json(result);
@@ -53,7 +53,7 @@ app.get('/productos', async(req:Request,res:Response)=>{
 });
 
 // VER USUARIOS
-app.get('/admin/usuarios', async(req:Request,res:Response)=>{
+app.get('/admin/usuarios', async(req:Request,res:Response) => {
     try{
         let result = await db.any("SELECT * FROM usuarios");
         res.json(result);
@@ -92,12 +92,12 @@ app.get('/categories', async (req: Request, res: Response) => {
 // LOGIN
 app.post('/login', jsonParser, async(req:Request,res:Response) => {
 
-    let nombre_usuario = req.body.nombre_usuario;
-    let contrasenya = req.body.contrasenya;
+    let email = req.body.email;
+    let pwd = req.body.password;
 
     try{
-        let result = await db.any('SELECT * FROM usuarios WHERE nombre_usuario = $1 AND contrasenya = $2',[nombre_usuario,contrasenya]);
-        
+        let result = await db.any('SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2',[email,pwd]);
+
         if(result[0].rol === (1)){
             res.json({userType: 1}); // ADMIN
         } else if (result[0].rol === (2)){
@@ -140,10 +140,11 @@ app.post('/admin/agregarProducto', jsonParser, async(req:Request,res:Response) =
     const descripcion = req.body.descripcion;
     const precio = req.body.precio;
     const stock = req.body.stock;
+    const imagen = req.body.imagen;
     const marca = req.body.marca;
     const categoria = req.body.categoria;
     try{
-        let result = await db.any("INSERT INTO productos(id_producto,nombre,descripcion,precio,stock,marca,categoria) VALUES($1,$2,$3,$4,$5,$6,$7)",[id_producto,nombre,descripcion,precio,stock,marca,categoria]);
+        let result = await db.any("INSERT INTO productos(id_producto,nombre,descripcion,precio,stock,imagen,marca,categoria) VALUES($1,$2,$3,$4,$5,$6,$7,$8)",[id_producto,nombre,descripcion,precio,stock,imagen,marca,categoria]);
         res.json(result);
     }
     catch (error) {
@@ -152,10 +153,35 @@ app.post('/admin/agregarProducto', jsonParser, async(req:Request,res:Response) =
 });
 
 // PUT - UPDATE
+app.put('/admin/actualizarProducto', jsonParser, async(req: Request, res: Response) => {
+    const id_producto = req.body.id_producto;
+    const nombre = req.body.nombre;
+    const descripcion = req.body.descripcion;
+    const precio = req.body.precio;
+    const stock = req.body.stock;
+    const imagen = req.body.imagen;
+    const marca = req.body.marca;
+    const categoria = req.body.categoria;
 
+    try {
+        let result = await db.any("UPDATE productos SET nombre=$2,descripcion=$3,precio=$4,stock=$5,imagen=$6,marca=$7,categoria=$8 WHERE id_producto=$1", [id_producto, nombre, descripcion, precio, stock, imagen, marca, categoria]);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar producto.' });
+    }
+});
 
 // DELETE
+app.delete('/admin/eliminarProducto', jsonParser, async(req: Request, res: Response) => {
+    const id_producto = req.body.id_producto;
 
+    try {
+        let result = await db.any("DELETE FROM productos WHERE id_producto=$1", [id_producto]);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({error: 'Error al eliminar producto.'})
+    }
+});
 
 // Iniciar server
 app.listen(port, () => {
