@@ -9,7 +9,11 @@ const config = {
     }
 };
 
-// FUNCS
+/*
+    API REQUESTS
+*/
+
+// GET
 async function GETRequest(endpoint:string) {
     try {
         const res = await axios.get(url + endpoint);
@@ -64,6 +68,7 @@ async function getRecommended() {
     return rec;
 }
 
+// POST
 async function POSTRequest(endpoint:string, body:any) {
     try {
         const res = await axios.post(url + endpoint ,body, config);

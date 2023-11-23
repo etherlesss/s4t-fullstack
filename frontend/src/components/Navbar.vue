@@ -16,7 +16,7 @@
                         <router-link class="nav-link" to="/admin">Control panel</router-link>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
+                <form class="d-flex" role="search" v-if="$route.path !== '/search'">
                     <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                 </form>

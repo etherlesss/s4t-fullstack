@@ -6,6 +6,7 @@
         </aside>
         <main class="container">
             <h1 id="section-title">Resultados de búsqueda</h1>
+            <Indexer />
             <ProductCards />
         </main>
     </div>
@@ -17,12 +18,14 @@ import { defineComponent } from 'vue';
 import Navbar from '@/components/Navbar.vue'; // @ is an alias to /src
 import Footer from '@/components/Footer.vue';
 import Filter from '@/components/Filter.vue';
+import Indexer from '@/components/Indexer.vue';
 import ProductCards from '@/components/cards/Products.vue';
 
 export default defineComponent({
     name: 'SearchView',
     components: {
         Navbar,
+        Indexer,
         Filter,
         ProductCards,
         Footer
