@@ -85,6 +85,18 @@ app.get('/categories', async (req: Request, res: Response) => {
     }
 });
 
+// VER UN PRODUCTO
+app.get('/details/product=:id', async (req: Request, res: Response) => {
+    let id = req.params.id;
+    try {
+        const producto = await db.any("SELECT * FROM productos WHERE id_producto=$1", [id]);
+        res.json(producto);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'Error al obtener el producto.'});
+    }
+})
+
 /*
     POST - UPLOAD
 */

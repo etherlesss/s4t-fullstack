@@ -36,6 +36,7 @@
                 </li>
             </ul>
         </section>
+        <a href="#" class="btn btn-primary main-btn" @click="applyFilter">Aplicar filtros</a>
     </div>
 </template>
 
@@ -56,6 +57,11 @@ export default defineComponent({
             this.categories = await getCategories();
         } catch (error) {
             console.error("Error fetching filters:", error);
+        }
+    },
+    methods: {
+        applyFilter() {
+            //this.$emit('filter', (value:any) => value.nombre === 'audio')
         }
     },
     name: 'Filters'

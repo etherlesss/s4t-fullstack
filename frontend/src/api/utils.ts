@@ -35,29 +35,68 @@ async function getCategories() {
     return res.map((item:any) => { return item.nombre }).sort();
 }
 
+async function getBrands() {
+    const res = await GETRequest("/filters");
+
+    return res;
+}
+
 async function getProducts() {
     const res = await GETRequest("/productos");
+    const brands = await getBrands();
 
     for (let i = 0; i < res.length; i++) {
         if (res[i].imagen === null) {
             res[i].imagen = "https://www.hongshen.cl/wp-content/uploads/2016/07/no-disponible.png";
+        }
+
+        for (let j = 0; j < brands.length; j++) {
+            if (res[i].marca === brands[j].id_marca) {
+                res[i].marca = brands[j].nombre;
+            }
         }
     }
 
     return res;
 }
 
+async function getProduct(id:any) {
+    const res = await GETRequest("/details/product=" + id);
+    const brands = await getBrands();
+
+    let parsedRes = res[0];
+
+    if (parsedRes.imagen === null) {
+        parsedRes.imagen = "https://www.hongshen.cl/wp-content/uploads/2016/07/no-disponible.png";
+    }
+
+    for (let i = 0; i < brands.length; i++) {
+        if (parsedRes.marca === brands[i].id_marca) {
+            parsedRes.marca = brands[i].nombre;
+        }
+    }
+
+    return parsedRes;
+}
+
 async function getRecommended() {
     const res = await GETRequest("/productos");
+    const brands = await getBrands();
     const rec = [] as any;
 
     for (let i = 0; i < res.length; i++) {
         if (res[i].imagen === null) {
             res[i].imagen = "https://www.hongshen.cl/wp-content/uploads/2016/07/no-disponible.png";
         }
+
+        for (let j = 0; j < brands.length; j++) {
+            if (res[i].marca === brands[j].id_marca) {
+                res[i].marca = brands[j].nombre;
+            }
+        }
     }
 
-    while (rec.length < 3) {
+    while (rec.length < 4) {
         const rand = Math.floor(Math.random() * res.length);
         const randItem = res[rand];
         if (!rec.includes(randItem)) {
@@ -94,4 +133,4 @@ async function postLogin() {
     return { username, isAdmin: usertype, isLogged: true };
 }
 
-export { getFilters, getCategories, postLogin, getProducts, getRecommended };
+export { getFilters, getCategories, postLogin, getProducts, getRecommended, getProduct };

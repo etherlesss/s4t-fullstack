@@ -3,17 +3,21 @@
     <main class="container">
         <h1 id="section-title">Detalles del producto</h1>
         <section class="top-container d-flex flex-column flex-md-row gap-md-5 p-3 mb-5">
-            <img src="https://www.si-analytics.com/Image%20Library/sample-images/Placeholder-500x500.png"
-                class="d-block mb-3 mb-md-0" alt="placeholder producto">
-            <div class="product-info p-5 col d-flex flex-column">
-                <h2 class="fw-bold">Nombre</h2>
-                <h3>Marca</h3>
-                <h4 class="fw-bold text-end">Precio</h4>
-                <h4 class="fw-bold text-end">Precio oferta</h4>
-                <p class="text-end">Descuento</p>
+            <img :src="product.imagen"
+                class="d-block mb-3 mb-md-0" :alt="product.descripcion">
+            <div class="product-info p-5 col d-flex flex-column text-break">
+                <h2 class="fw-bold">{{ product.nombre }}</h2>
+                <h3>Por: <b>{{ product.marca }}</b></h3>
+                <h4 class="text-end">Precio: <b>${{ product.precio }}</b></h4>
+                <!-- <h4 class="fw-bold text-end">Precio oferta</h4>
+                <p class="text-end">Descuento</p> -->
                 <div class="stock d-flex p-2 justify-content-between">
                     <p class="text-start m-0">Stock disponible</p>
-                    <p class="text-end m-0">5</p>
+                    <p class="text-end m-0"><b>{{ product.stock }}</b></p>
+                </div>
+                <div class="mt-2 mb-2">
+                    <p v-if="product.descripcion">{{ product.descripcion }}</p>
+                    <p v-else><i>La descripción para este artículo no está disponible.</i></p>
                 </div>
                 <div class="d-flex flex-column gap-1 mt-auto">
                     <a href="#" class="btn btn-primary main-btn">Comprar ahora</a>
@@ -42,9 +46,15 @@ import Navbar from '@/components/Navbar.vue'; // @ is an alias to /src
 import Footer from '@/components/Footer.vue';
 import RecommendedCards from '@/components/cards/Recommended.vue';
 import Spec from '@/components/Spec.vue';
+import { getProduct } from '@/api/utils';
 
 export default defineComponent({
     name: 'DetailView',
+    data() {
+        return {
+            product: {} as any
+        }
+    },
     components: {
         Navbar,
         RecommendedCards,
@@ -52,8 +62,14 @@ export default defineComponent({
         Footer
     },
     // SEO
-    mounted() {
+    async mounted() {
         document.title = 'S4T | Detalles del producto';
+        try {
+            const id = this.$route.params.id;
+            this.product = await getProduct(id);
+        } catch (error) {
+            console.error("Error fetching product:", error);
+        }
     },
 });
 </script>
@@ -75,5 +91,14 @@ export default defineComponent({
 
 .spec-list>li>p {
     margin: 0;
+}
+
+.top-container > img {
+    max-height: 500px;
+    max-width: 500px;
+}
+
+.top-container p {
+    margin-bottom: 0 !important;
 }
 </style>
