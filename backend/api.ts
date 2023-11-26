@@ -1,16 +1,19 @@
-import cors from 'cors';
-import { Request, Response } from 'express';
 require("dotenv").config();
+import cors from 'cors';
+import express ,{ Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import middlewares from "./middlewares";
 
-const express = require("express");
+
+
+const SECRET_KEY = process.env.JWT_SECRET_KEY ?? 'secretkey';
+
 const app = express();
-
 const port = process.env.PORT || 5000;
 
-// pasar parametros al backend
-const bodyParser = require("body-parser");
+//borrar los JsonParser y los bodyparser
 
-var jsonParser = bodyParser.json()
+app.use(express.json());
 
 // CORS
 const corsConfig = {
@@ -19,7 +22,6 @@ const corsConfig = {
 }
 
 app.use(cors(corsConfig));
-
 // Postgres
 const pgp = require("pg-promise")();
 const connection = {
@@ -27,7 +29,7 @@ const connection = {
     port: 5432,
     database: 'secfortech', // Nombre de la DB (cambiar respecto a su contraseña respectiva para probar)
     user: 'postgres',
-    password: 'admin' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
+    password: 'postgres' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
 }
 
 const db = pgp(connection)
@@ -40,9 +42,25 @@ app.get('/', (req: Request, res: Response) => {
 /*
     GET - READ
 */
+//SAcar tokem
 
+app.get('/get-token',async(req:Request,res:Response)=>{
+
+    try{
+        let token = localStorage.getItem('token');
+        if(token){
+            console.log(token);
+            res.json(jwt.verify(token,SECRET_KEY));
+        }
+    }
+    catch(error){
+        console.log(error);
+    }
+
+})
 // VER LISTA DE PRODUCTOS
 app.get('/productos', async(req:Request,res:Response) => {
+
     try{
         let result = await db.any("SELECT * FROM productos");
         res.json(result);
@@ -53,7 +71,7 @@ app.get('/productos', async(req:Request,res:Response) => {
 });
 
 // VER USUARIOS
-app.get('/admin/usuarios', async(req:Request,res:Response) => {
+app.get('/admin/usuarios',middlewares.authGuard,middlewares.adminGuard, async(req:Request,res:Response) => {
     try{
         let result = await db.any("SELECT * FROM usuarios");
         res.json(result);
@@ -98,43 +116,133 @@ app.get('/details/product=:id', async (req: Request, res: Response) => {
 })
 
 /*
+SIENTO QUE ESTO ES MALA PRACTICA PERO BUENO AMIQUE
+NO USAR, DEPSUES SE BORRA, NO QUIERO PERDERLAS AÚN
+*/
+
+function decodeToken(token:any){
+    try{
+        const decoded= jwt.verify(token,SECRET_KEY);
+        return decoded;
+    }
+    catch(error){
+        console.log(error);
+        return null;
+    }
+}
+
+function checkUserRole(decoded:any) {
+    if (decoded.rol === 1) {
+      return 'admin';
+    } else if (decoded.rol === 2) {
+      return 'user';
+    } else {
+      return null;
+    }
+  }
+
+app.get('/api/check-user-role', async (req:Request, res:Response) => {
+    const token = req.query.token as string;
+    try {
+      const decoded = decodeToken(token);
+      const userRole = checkUserRole(decoded);
+      console.log(userRole);
+      res.json({ rol: userRole });
+    } catch (error) {
+      res.status(401).json({ error: 'Invalid token' });
+    }
+});
+  
+/*
     POST - UPLOAD
 */
 
 // LOGIN
-app.post('/login', jsonParser, async(req:Request,res:Response) => {
-
+//return token, fecha de expiración
+// username y rol
+app.post('/login', async(req:Request,res:Response) => {
     let email = req.body.email;
     let pwd = req.body.password;
 
-    try{
-        let result = await db.any('SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2',[email,pwd]);
+    console.log(req.body);
 
-        if(result[0].rol === (1)){
-            res.json({userType: 1}); // ADMIN
-        } else if (result[0].rol === (2)){
-            res.json({userType: 2}); // USER
+    try{
+        console.log(email,pwd);
+        const result = await db.any('SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2',[email,pwd]);
+        //test
+        //console.log(result);
+        if(result == null){
+            res.status(404).send({
+                message: 'Datos incorrectos',
+            });
+            return;
         }
-        else{
-            res.status(401).json({error:'Tipo de usuario inválido'});
-        }
-    }
+        //añadir verificaciones
+        const token = jwt.sign(
+            { email:   result[0].email, rol: result[0].rol },
+            SECRET_KEY,
+            { expiresIn: '24h' },
+        );
+        
+        res.status(200).send({
+            message: 'Inicio de sesión correcto',
+
+            token:{
+                token,
+                expiresOn: new Date(Date.now() + 24*60*60*1000).getTime(),
+            },
+            usuario:{
+                email: result[0].email,
+                rol: result[0].rol,
+            },
+        });
+     }
     catch (error){
+        console.error(error);
         res.status(401).json({error:'Usuario o contraseña incorrectos'});
     }
 });
 
+app.get('/postLogin',async(req:Request,res:Response)=>{
+    let email = req.body.email;
+    let contrasenya = req.body.contrasenya;
+    try{
+        let result = await db.any("SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2",[email,contrasenya]); 
+        if(result == null){
+            res.status(404).send({
+                message: 'Datos incorrectos',
+            });
+            return;
+        }
+        if((this as any).result.rol !== 1){
+            res.status(401);
+            return 1;
+        }
+        else{
+            res.status(400);
+            return 2;
+        }
+    }
+    catch(error){
+        
+    }
+    
+
+});
 /* TODO: REGISTRO DESPUES DE QUE LOS FORMS ENTREGUEN JSON. */
 
 // REGISTRO
-app.post('/register', jsonParser, async(req:Request,res:Response) => {
-
+app.post('/register', async(req:Request,res:Response) => {
+    
     let rut = req.body.rut;
     let nombre_usuario = req.body.nombre_usuario;
     let mail = req.body.mail;
     let contrasenya = req.body.contrasenya;
     let region = req.body.region;
     let ciudad = req.body.ciudad;
+    
+    //Validar que entren todos los datos obligatorios
+    //verificar que no exista la PK
 
     try{
         let result = await db.any('INSERT INTO usuarios(rut,nombre_usuario,mail,contrasenya,region,ciudad,rol) VALUES($1,$2,$3,$4,$5,$6,2)',[rut,nombre_usuario,mail,contrasenya,region,ciudad]);
@@ -146,7 +254,11 @@ app.post('/register', jsonParser, async(req:Request,res:Response) => {
 });
 
 // AGREGAR PRODUCTOS
-app.post('/admin/agregarProducto', jsonParser, async(req:Request,res:Response) => {
+app.post('/admin/agregarProducto',middlewares.authGuard,middlewares.adminGuard,async(req:Request,res:Response) => {
+
+    //verificar token
+    //verificar que sea admin
+
     const id_producto = req.body.id_producto;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
@@ -165,7 +277,11 @@ app.post('/admin/agregarProducto', jsonParser, async(req:Request,res:Response) =
 });
 
 // PUT - UPDATE
-app.put('/admin/actualizarProducto', jsonParser, async(req: Request, res: Response) => {
+app.put('/admin/actualizarProducto',middlewares.authGuard,middlewares.adminGuard, async(req: Request, res: Response) => {
+
+    //verificar token
+    //verificar que sea admin
+
     const id_producto = req.body.id_producto;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
@@ -184,7 +300,11 @@ app.put('/admin/actualizarProducto', jsonParser, async(req: Request, res: Respon
 });
 
 // DELETE
-app.delete('/admin/eliminarProducto', jsonParser, async(req: Request, res: Response) => {
+app.delete('/admin/eliminarProducto',middlewares.authGuard,middlewares.adminGuard, async(req: Request, res: Response) => {
+
+    //verificar token
+    //verificar que sea admin
+
     const id_producto = req.body.id_producto;
 
     try {

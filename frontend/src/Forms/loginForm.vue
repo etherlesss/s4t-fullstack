@@ -36,6 +36,7 @@
 </template>
   
 <script lang="ts">
+import axios from 'axios';
 import { Form, Field, ErrorMessage} from 'vee-validate';
 
 interface FormData {
@@ -66,8 +67,30 @@ export default {
         };
     },
     methods: {
-        SubmitForm() {
-            console.log('Form values', (this as any).formData);
+        async SubmitForm() {
+            
+            try{
+                const response = await axios.post('http://localhost:5000/login',{
+
+                    
+                    email: (this as any).formData.email,
+                    password: (this as any).formData.password,
+                });
+                
+                console.log((this as any).formData.email);
+
+                const token = response.data.token;
+                
+                localStorage.setItem('token',JSON.stringify({
+                    token: token,
+                    expires: 10,
+                }));
+                (this as any).$router.push('/');
+            }
+            catch(error){
+
+            }
+            console.log('Form values', (this as any).formData.email);
         }
     },
 };

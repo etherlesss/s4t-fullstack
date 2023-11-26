@@ -16,6 +16,15 @@ import Footer from '@/components/Footer.vue';
 import Carousel from '@/components/Carousel.vue';
 import RecommendedCards from '@/components/cards/Recommended.vue';
 
+import {AuthState, validateAuthToken} from '../functions/localStorage';
+import {fetchApi} from '../functions/auth';
+import { Ref } from 'vue';
+
+
+const Inicio = () =>{
+    
+}
+
 export default defineComponent({
     name: 'HomeView',
     components: {
@@ -27,6 +36,9 @@ export default defineComponent({
     // SEO
     mounted() {
         document.title = 'S4T | Security for Technology';
+
+
+
     },
 });
 </script>

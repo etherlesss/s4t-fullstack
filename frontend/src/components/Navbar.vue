@@ -45,34 +45,45 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { postLogin } from '../api/utils';
+import axios from 'axios';
 
 export default defineComponent({
-    data() {
-        return {
-            username: "",
-            isUserAdmin: false,
-            isUserLogged: false,
-
-            links: [
-                { name: 'Productos', url: '/search' },
-                { name: 'Soporte al cliente', url: '/support' },
-                { name: 'Sobre nosotros', url: '/about' }
-            ]
-        };
-    },
-    async mounted() {
-        try {
-            const user = await postLogin();
-            this.isUserLogged = user.isLogged;
-            this.isUserAdmin = user.isAdmin;
-            this.username = user.username as string;
-        } catch (error) {
-            console.log(error);
+  data() {
+    return {
+      username: "",
+      isUserAdmin: false,
+      isUserLogged: false,
+      links: [
+        { name: 'Productos', url: '/search' },
+        { name: 'Soporte al cliente', url: '/support' },
+        { name: 'Sobre nosotros', url: '/about' }
+      ]
+    };
+  },
+  async mounted() {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log(token)
+        //tira error con axios, ahi ver que pasa
+        const response = await axios.get('https://localhost:5000/get-token', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log(response.data.rol);
+        if (response.data.rol === 1) {
+          this.isUserAdmin = true;
+        } else {
+          this.isUserAdmin = false;
         }
-    },
-    name: 'Navbar'
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 });
+
 </script>
 
 <style lang="less">

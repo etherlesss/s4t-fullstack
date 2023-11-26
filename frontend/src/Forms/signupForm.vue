@@ -51,9 +51,9 @@
 <script lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import citiesInfo from '../json/signup_data.json';
+import axios from 'axios';
 
 export default {
-
     name: 'loginForm',
     components: {
         Form,
@@ -68,25 +68,39 @@ export default {
     },
     data() {
         return {
-            formData:{
-                User:'',
-                Rut:'',
-                email:'',
-                Password:'',
-                ConfirmPassword:'',
-                selectedRegion:[],
-                selectedCity:[],
+            formData: {
+                User: '',
+                Rut: '',
+                email: '',
+                Password: '',
+                ConfirmPassword: '',
+                selectedRegion: [],
+                selectedCity: [],
             },
             selectedRegion: null,
-            selectedCity:null,
+            selectedCity: null,
             regions: citiesInfo.regions,
             cities: citiesInfo.cities,
-        }
+        };
     },
     methods: {
-        submitForm() {
-            console.log('Form values', (this as any).formData);
-        }
+        async submitForm() {
+            try {
+                //en mi cabeza tiene sentido
+                const verify = await axios.post('http://localhost:5000/register',{
+
+                    rut:(this as any).formData.Rut,
+                    nombre_usuario:(this as any).formData.User,
+                    mail:(this as any).formData.email,
+                    contrasenya:(this as any).formData.Password,
+                    region:(this as any).formData.selectedRegion,
+                    ciudad:(this as any).formData.selectedCity,
+                });
+            }
+            catch(error){
+                console.log(error);
+            }
+        },
     },
 };
 </script>

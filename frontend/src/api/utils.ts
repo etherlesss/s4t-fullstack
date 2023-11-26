@@ -82,7 +82,7 @@ async function getProduct(id:any) {
 async function getRecommended() {
     const res = await GETRequest("/productos");
     const brands = await getBrands();
-    const rec = [] as any;
+    let rec = [] as any[];
 
     for (let i = 0; i < res.length; i++) {
         if (res[i].imagen === null) {
@@ -96,11 +96,14 @@ async function getRecommended() {
         }
     }
 
-    while (rec.length < 4) {
-        const rand = Math.floor(Math.random() * res.length);
-        const randItem = res[rand];
+    console.log(res);
+
+    //ojo
+    for(let i= 0; i < 4 ;i++) {
+        let rand = Math.floor(Math.random() * res.length);
+        let randItem = res[rand];
         if (!rec.includes(randItem)) {
-          rec.push(randItem);
+            rec.push(randItem);
         }
     }
 
@@ -119,18 +122,21 @@ async function POSTRequest(endpoint:string, body:any) {
         return status;
     }
 }
-
-async function postLogin() {
+// no
+async function postLogin(this: any) {
     // no cambiar keys (variables)
+    /*
     const user = { nombre_usuario: "admin", contrasenya: "22888111Ts" };
     const username = user.nombre_usuario;
     const res = await POSTRequest("/login", user);
+    */
+    let res = await axios.get('https://localhost:5000/postLogin');
 
-    const usertype = res.userType == 1 ? true : false;
+    if (res.data.rol == 400) { return { isAdmin: false, isLogged: false };}
+    if(res.data.rol == 401) {return { isAdmin: true, isLogged: true };}
 
-    if (res == 401) { return { isAdmin: false, isLogged: false }; }
-
-    return { username, isAdmin: usertype, isLogged: true };
+    return { isAdmin: false, isLogged: false };
+    
 }
 
 export { getFilters, getCategories, postLogin, getProducts, getRecommended, getProduct };
