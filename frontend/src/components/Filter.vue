@@ -53,8 +53,8 @@ export default defineComponent({
     },
     async mounted() {
         try {
-            // this.brands = await getFilters();
-            //this.categories = await getCategories();
+            this.brands = await getFilters();
+            this.categories = await getCategories();
         } catch (error) {
             console.error("Error fetching filters:", error);
         }

@@ -29,7 +29,7 @@ const connection = {
     port: 5432,
     database: 'secfortech', // Nombre de la DB (cambiar respecto a su contraseña respectiva para probar)
     user: 'postgres',
-    password: 'postgres' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
+    password: 'admin' // Password usuario postgres (cambiar respecto a su contraseña respectiva para probar)
 }
 
 const db = pgp(connection)
