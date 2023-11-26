@@ -66,7 +66,7 @@ export default defineComponent({
       if (token) {
         console.log(token)
         //tira error con axios, ahi ver que pasa
-        const response = await axios.get('https://localhost:5000/get-token', {
+        const response = await axios.get('http://localhost:5000/get-token', {
           headers: {
             Authorization: `Bearer ${token}`
           }

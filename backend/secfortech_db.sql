@@ -172,8 +172,15 @@ INSERT INTO ciudades VALUES
 (42, 'Viña del mar', 5);
 
 INSERT INTO productos VALUES
-(0, 'producto de prueba', null, 9990, 2, null, 1, 1),
-(1, 'producto de prueba 222222', null, 9990, 2, null, 5, 2);
+(1, 'Mouse Logitech G Pro X Superlight', 'Wireless, Lightspeed, Sensor Hero 25000DPI, 1000Hz polling rate, color blanco.', 89990, 20,
+'https://nachocustomz.com/cdn/shop/files/Gpro.webp?v=1691106945', 1, 1);
+(2, 'Unidad SSD Kingston NV2 4TB M.2 2280', 'PCIe 4.0, NVMe con lectura de 3500 MB/s, escritura de 2800 MB/s', 240990, 7,
+'https://media.spdigital.cl/thumbnails/products/33n_a_2m_a9a6418f_thumbnail_512.jpg', 3, 2)
+(3, 'Monitor Gamer GIGABYTE G24F 2 24'' 180Hz (OC)', '1920 x 1080, IPS, 1ms GTG, HDMI y DisplayPort', 199990, 3,
+'https://www.zonadigitalsv.com/product/889523032411/image', 9, 1)
+(4, 'Mouse Gamer Logitech G Pro', 'Sensor HERO, 16000DPI para eSports, 6 Botones programables', 39990, 20,
+'https://cdnx.jumpseller.com/easytech-store/image/24088556/resize/1200/1200?1652376746', 1, 1)
+		
 
 -- rut, nombre, mail, contraseña, region, ciudad, rol
 INSERT INTO usuarios VALUES
