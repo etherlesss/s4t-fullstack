@@ -6,6 +6,7 @@
 - pgAdmin
 - Visual Studio Code
 - Node
+- Typescript (`npm install -g typescript`)
 
 ---
 
