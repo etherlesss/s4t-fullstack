@@ -24,6 +24,11 @@
 2. En una ventana abrir la carpeta **backend** y en la otra ventana abrir la carpeta **frontend**.
 3. Realizar `npm install` en ambas carpetas, de otra forma las dependencias no estarán disponibles y por ende, ambas partes no podran iniciar.
 
+### Cambiar clave de base de datos
+
+1. Entrar al codigo de backend `api.ts`
+2. dentro de `const connection ={...}`, cambiar `password:` por la contraseña correspondiente a su clave postgres elegida al momento de instalacion.
+
 ---
 
 ## Iniciar proyecto
