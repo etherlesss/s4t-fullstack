@@ -12,7 +12,7 @@
                                 {{ text }}
                             </component>
                         </template>
-                        
+
 
                     </Field>
                     <ErrorMessage :name="name" class="error-message" />
@@ -26,8 +26,9 @@
                     </div>
                     <div class="col-12" v-if="formData.selectedRegion">
                         <label for="City">Selecciona una Ciudad</label>
-                        <select v-model="formData.selectedCity"  class="form-control" id="city">
-                            <option v-for="city in cities[formData.selectedRegion]" :value="city" :key="city">{{ city }}</option>
+                        <select v-model="formData.selectedCity" class="form-control" id="city">
+                            <option v-for="city in cities[formData.selectedRegion]" :value="city" :key="city">{{ city }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -54,7 +55,7 @@ import citiesInfo from '../json/signup_data.json';
 import axios from 'axios';
 
 export default {
-    name: 'loginForm',
+    name: 'signupForm',
     components: {
         Form,
         Field,
@@ -85,19 +86,20 @@ export default {
     },
     methods: {
         async submitForm() {
+            
             try {
                 //en mi cabeza tiene sentido
-                const verify = await axios.post('http://localhost:5000/register',{
+                const verify = await axios.post('https://localhost:5000/register', {
 
-                    rut:(this as any).formData.Rut,
-                    nombre_usuario:(this as any).formData.User,
-                    mail:(this as any).formData.email,
-                    contrasenya:(this as any).formData.Password,
-                    region:(this as any).formData.selectedRegion,
-                    ciudad:(this as any).formData.selectedCity,
+                    rut: (this as any).formData.Rut,
+                    nombre_usuario: (this as any).formData.User,
+                    mail: (this as any).formData.email,
+                    contrasenya: (this as any).formData.Password,
+                    region: (this as any).formData.selectedRegion,
+                    ciudad: (this as any).formData.selectedCity,
                 });
             }
-            catch(error){
+            catch (error) {
                 console.log(error);
             }
         },
@@ -110,7 +112,7 @@ export default {
 }
 
 .signup {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;

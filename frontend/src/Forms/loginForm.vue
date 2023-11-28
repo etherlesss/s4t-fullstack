@@ -70,7 +70,7 @@ export default {
         async SubmitForm() {
             
             try{
-                const response = await axios.post('http://localhost:5000/login',{
+                const response = await axios.post('https://localhost:5000/login',{
 
                     
                     email: (this as any).formData.email,
@@ -90,7 +90,6 @@ export default {
             catch(error){
 
             }
-            console.log('Form values', (this as any).formData.email);
         }
     },
 };

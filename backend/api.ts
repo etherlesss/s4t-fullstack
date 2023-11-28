@@ -4,7 +4,8 @@ import express ,{ Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import middlewares from "./middlewares";
 
-
+const bcrypt = require('bcrypt');
+const mySalt = '$2b$10$ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNO';
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY ?? 'secretkey';
 
@@ -165,10 +166,11 @@ app.post('/login', async(req:Request,res:Response) => {
     let pwd = req.body.password;
 
     console.log(req.body);
-
     try{
+        console.log(pwd)
         console.log(email,pwd);
-        const result = await db.any('SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2',[email,pwd]);
+        const encodepwd = await bcrypt.hash(pwd,mySalt);
+        const result = await db.any('SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2',[email,encodepwd]);
         //test
         //console.log(result);
         if(result == null){
@@ -206,8 +208,10 @@ app.post('/login', async(req:Request,res:Response) => {
 app.get('/postLogin',async(req:Request,res:Response)=>{
     let email = req.body.email;
     let contrasenya = req.body.contrasenya;
+    let contrasenyaEncriptada  =  await bcrypt.hash(contrasenya,mySalt);
+    
     try{
-        let result = await db.any("SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2",[email,contrasenya]); 
+        let result = await db.any("SELECT * FROM usuarios WHERE mail = $1 AND contrasenya = $2",[email,contrasenyaEncriptada])
         if(result == null){
             res.status(404).send({
                 message: 'Datos incorrectos',
@@ -224,7 +228,7 @@ app.get('/postLogin',async(req:Request,res:Response)=>{
         }
     }
     catch(error){
-        
+        res.status(404);
     }
     
 
@@ -240,12 +244,11 @@ app.post('/register', async(req:Request,res:Response) => {
     let contrasenya = req.body.contrasenya;
     let region = req.body.region;
     let ciudad = req.body.ciudad;
-    
+    const contrasenyaEncriptada = await bcrypt.hash(contrasenya,mySalt);
     //Validar que entren todos los datos obligatorios
     //verificar que no exista la PK
-
     try{
-        let result = await db.any('INSERT INTO usuarios(rut,nombre_usuario,mail,contrasenya,region,ciudad,rol) VALUES($1,$2,$3,$4,$5,$6,2)',[rut,nombre_usuario,mail,contrasenya,region,ciudad]);
+        let result = await db.none('INSERT INTO usuarios(rut,nombre_usuario,mail,contrasenya,region,ciudad,rol) VALUES($1,$2,$3,$4,$5,$6,2)',[rut,nombre_usuario,mail,contrasenyaEncriptada,region,ciudad]);
         res.json(result);
     }
     catch (error){

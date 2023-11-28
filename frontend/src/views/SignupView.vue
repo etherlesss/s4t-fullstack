@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-row">
-        <SignupSidebar/>
-        <signupForm :schema="formSchema"/>
+        <SignupSidebar />
+        <signupForm :schema="formSchema" />
     </div>
     <div class="d-md-none">
         <div id="secondarySignup" class="secondary-container">
@@ -15,10 +15,10 @@
                 </li>
             </ul>
             <div class="back-btn">
-            <router-link class="link-dark bottom-hint d-flex align-items-center p-2 gap-2" to="/">
-                <i class="bi bi-arrow-left fs-5"></i>
-                <p class="mb-0 fs-5">Volver al inicio</p>
-            </router-link>
+                <router-link class="link-dark bottom-hint d-flex align-items-center p-2 gap-2" to="/">
+                    <i class="bi bi-arrow-left fs-5"></i>
+                    <p class="mb-0 fs-5">Volver al inicio</p>
+                </router-link>
             </div>
         </div>
     </div>
@@ -30,12 +30,13 @@ import * as Yup from 'yup';
 import SignupSidebar from '@/components/sidebars/Signup.vue';
 import signupForm from '@/Forms/signupForm.vue';
 
+
 export default defineComponent({
     name: 'SignupView',
     components: {
-        SignupSidebar,
-        signupForm
-    },
+    SignupSidebar,
+    signupForm,
+},
     // SEO
     mounted() {
         document.title = 'S4T | Creación de cuenta';
@@ -69,28 +70,26 @@ export default defineComponent({
                     label: 'Contraseña',
                     name: 'Password',
                     as: 'input',
-                    type:'password',
+                    type: 'password',
                     class: 'form-control',
-                    rules: Yup.string()
+                    rules: Yup.string().required('Campo Obligatorio')
                         .matches(
                             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
                             'La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una letra minúscula y un número'
                         )
-                        .required('Campo Obligatorio')
                 },
                 {
                     label: 'Confirmar contraseña',
                     name: 'ConfirmPassword',
                     as: 'input',
-                    type:'password',
+                    type: 'password',
                     class: 'form-control',
-                    //aqui esta el bug
-                    //rules: Yup.string().required('Campo Obligatorio').oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
+                    rules: Yup.string().required('Campo Obligatorio')
                 },
-                
+
             ],
         };
-        return{
+        return {
             formSchema
         };
     }
@@ -102,7 +101,7 @@ export default defineComponent({
     flex-grow: 1;
 }
 
-.page{
+.page {
     display: flex;
 }
 
@@ -114,22 +113,20 @@ export default defineComponent({
     text-align: center;
 }
 
-#secondarySignup{
+#secondarySignup {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.secondary-container ul{
+.secondary-container ul {
     display: flex;
 }
 
-.secondary-container li{
+.secondary-container li {
     font-size: 30px;
     padding-left: 10px;
     padding-right: 10px;
 }
-
-
 </style>
